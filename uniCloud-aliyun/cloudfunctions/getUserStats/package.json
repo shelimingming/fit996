@@ -1,0 +1,13 @@
+{
+  "name": "getUserStats",
+  "version": "1.0.0",
+  "description": "获取用户训练统计数据",
+  "main": "index.js",
+  "author": "fit996",
+  "cloudfunction-config": {
+    "memorySize": 256,
+    "timeout": 5,
+    "triggers": [],
+    "path": "/getUserStats"
+  }
+}
