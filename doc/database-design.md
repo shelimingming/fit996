@@ -6,70 +6,7 @@
 
 ## 集合设计
 
-### 1. 用户集合 (uni-id-users)
-
-> 注：此集合由 uni-id-pages 模块自动创建和管理，以下仅列出我们需要扩展的字段。
-
-```json
-{
-  "bsonType": "object",
-  "required": [],
-  "properties": {
-    "_id": {
-      "description": "用户ID，系统自动生成"
-    },
-    "username": {
-      "bsonType": "string",
-      "description": "用户名"
-    },
-    "nickname": {
-      "bsonType": "string",
-      "description": "用户昵称"
-    },
-    "avatar": {
-      "bsonType": "string",
-      "description": "用户头像URL"
-    },
-    "gender": {
-      "bsonType": "int",
-      "description": "性别：0-未设置，1-男，2-女",
-      "minimum": 0,
-      "maximum": 2
-    },
-    "height": {
-      "bsonType": "double",
-      "description": "身高(cm)"
-    },
-    "weight": {
-      "bsonType": "double",
-      "description": "体重(kg)"
-    },
-    "birthday": {
-      "bsonType": "date",
-      "description": "出生日期"
-    },
-    "fitness_level": {
-      "bsonType": "int",
-      "description": "健身水平：1-初级，2-中级，3-高级",
-      "minimum": 1,
-      "maximum": 3
-    },
-    "fitness_goal": {
-      "bsonType": "array",
-      "description": "健身目标",
-      "items": {
-        "bsonType": "string"
-      }
-    },
-    "last_assessment_time": {
-      "bsonType": "timestamp",
-      "description": "最近一次能力评估时间"
-    }
-  }
-}
-```
-
-### 2. 动作集合 (exercises)
+### 1. 动作集合 (exercises)
 
 ```json
 {
@@ -163,7 +100,7 @@
 }
 ```
 
-### 3. 用户评估集合 (user_assessments)
+### 2. 用户评估集合 (user_assessments)
 
 ```json
 {
@@ -241,7 +178,7 @@
 }
 ```
 
-### 4. 训练计划集合 (training_plans)
+### 3. 训练计划集合 (training_plans)
 
 ```json
 {
@@ -336,7 +273,7 @@
 }
 ```
 
-### 5. 训练记录集合 (workout_records)
+### 4. 训练记录集合 (workout_records)
 
 ```json
 {
@@ -426,7 +363,7 @@
 }
 ```
 
-### 6. 用户收藏集合 (user_favorites)
+### 5. 用户收藏集合 (user_favorites)
 
 ```json
 {
@@ -452,7 +389,7 @@
 }
 ```
 
-### 7. 用户成就集合 (user_achievements)
+### 6. 用户成就集合 (user_achievements)
 
 ```json
 {
@@ -478,7 +415,7 @@
 }
 ```
 
-### 8. 成就集合 (achievements)
+### 7. 成就集合 (achievements)
 
 ```json
 {
@@ -540,50 +477,56 @@
 
 - 主键索引：`_id`
 - 唯一索引：`username`
+
+### 2. 用户信息集合 (user_profiles)
+
+- 主键索引：`_id`
+- 唯一索引：`user_id`
 - 普通索引：`fitness_level`
 
-### 2. 动作集合 (exercises)
+### 3. 动作集合 (exercises)
 
 - 主键索引：`_id`
 - 复合索引：`{category: 1, difficulty: 1}`
 - 复合索引：`{target_muscles: 1, difficulty: 1}`
 
-### 3. 用户评估集合 (user_assessments)
+### 4. 用户评估集合 (user_assessments)
 
 - 主键索引：`_id`
 - 复合索引：`{user_id: 1, assessment_date: -1}`
 
-### 4. 训练计划集合 (training_plans)
+### 5. 训练计划集合 (training_plans)
 
 - 主键索引：`_id`
 - 复合索引：`{user_id: 1, is_active: 1}`
 - 复合索引：`{level: 1, goal: 1, is_system: 1}`
 
-### 5. 训练记录集合 (workout_records)
+### 6. 训练记录集合 (workout_records)
 
 - 主键索引：`_id`
 - 复合索引：`{user_id: 1, start_time: -1}`
 
-### 6. 用户收藏集合 (user_favorites)
+### 7. 用户收藏集合 (user_favorites)
 
 - 主键索引：`_id`
 - 唯一索引：`{user_id: 1, exercise_id: 1}`
 
-### 7. 用户成就集合 (user_achievements)
+### 8. 用户成就集合 (user_achievements)
 
 - 主键索引：`_id`
 - 唯一索引：`{user_id: 1, achievement_id: 1}`
 
 ## 集合关系
 
-1. **用户与评估**：一对多关系，一个用户可以有多次评估记录
-2. **用户与训练计划**：一对多关系，一个用户可以创建多个训练计划
-3. **用户与训练记录**：一对多关系，一个用户可以有多条训练记录
-4. **训练计划与训练记录**：一对多关系，一个训练计划可以对应多条训练记录
-5. **动作与训练计划**：多对多关系，通过训练计划中的exercises数组实现
-6. **动作与训练记录**：多对多关系，通过训练记录中的exercise_records数组实现
-7. **用户与收藏动作**：多对多关系，通过用户收藏集合实现
-8. **用户与成就**：多对多关系，通过用户成就集合实现
+1. **用户与用户信息**：一对一关系，一个用户对应一条用户信息记录
+2. **用户与评估**：一对多关系，一个用户可以有多次评估记录
+3. **用户与训练计划**：一对多关系，一个用户可以创建多个训练计划
+4. **用户与训练记录**：一对多关系，一个用户可以有多条训练记录
+5. **训练计划与训练记录**：一对多关系，一个训练计划可以对应多条训练记录
+6. **动作与训练计划**：多对多关系，通过训练计划中的exercises数组实现
+7. **动作与训练记录**：多对多关系，通过训练记录中的exercise_records数组实现
+8. **用户与收藏动作**：多对多关系，通过用户收藏集合实现
+9. **用户与成就**：多对多关系，通过用户成就集合实现
 
 ## 数据库权限设计
 
@@ -595,6 +538,7 @@
 ### 用户权限
 
 - **uni-id-users集合**：用户只能读写自己的数据
+- **user_profiles集合**：用户只能读写自己的数据
 - **user_assessments集合**：用户只能读写自己的数据
 - **training_plans集合**：用户只能读写自己的数据，系统预设计划所有用户可读
 - **workout_records集合**：用户只能读写自己的数据
