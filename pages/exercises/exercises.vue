@@ -273,6 +273,16 @@
 		overflow-y: auto;
 	}
 
+	/* 隐藏侧边栏滚动条 */
+	.sidebar::-webkit-scrollbar {
+		display: none;
+	}
+
+	.sidebar {
+		-ms-overflow-style: none;  /* IE and Edge */
+		scrollbar-width: none;  /* Firefox */
+	}
+
 	.sidebar-item {
 		padding: 30rpx 0;
 		text-align: center;
@@ -300,17 +310,30 @@
 		display: flex;
 		flex-direction: row;
 		overflow-x: scroll;
-		margin: 20rpx 0;
+		margin: 10rpx 0;
 		white-space: nowrap;
-		padding-bottom: 10rpx;
+	}
+
+	/* 隐藏器材分类标签滚动条 */
+	.equipment-tabs::-webkit-scrollbar {
+		display: none;
+	}
+
+	.equipment-tabs {
+		-ms-overflow-style: none;  /* IE and Edge */
+		scrollbar-width: none;  /* Firefox */
 	}
 
 	.tab-item {
-		padding: 15rpx 30rpx;
-		margin-right: 20rpx;
-		border-radius: 30rpx;
+		padding: 8rpx 20rpx;
+		margin-right: 15rpx;
+		border-radius: 20rpx;
 		background-color: #f5f5f5;
-		font-size: 28rpx;
+		font-size: 20rpx;
+		display: flex;
+		flex-direction: row;
+		justify-content: center;
+		align-items: center;
 	}
 
 	.tab-item.active {
