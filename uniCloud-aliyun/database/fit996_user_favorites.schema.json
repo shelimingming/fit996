@@ -1,0 +1,27 @@
+{
+  "bsonType": "object",
+  "required": ["user_id", "exercise_id"],
+  "permission": {
+    "read": "doc.user_id == auth.uid || 'READ_FIT996_USER_FAVORITES' in auth.permission",
+    "create": true,
+    "update": "doc.user_id == auth.uid || 'UPDATE_FIT996_USER_FAVORITES' in auth.permission",
+    "delete": "doc.user_id == auth.uid || 'DELETE_FIT996_USER_FAVORITES' in auth.permission"
+  },
+  "properties": {
+    "_id": {
+      "description": "收藏ID，系统自动生成"
+    },
+    "user_id": {
+      "bsonType": "string",
+      "description": "用户ID"
+    },
+    "exercise_id": {
+      "bsonType": "string",
+      "description": "动作ID"
+    },
+    "create_date": {
+      "bsonType": "timestamp",
+      "description": "收藏时间"
+    }
+  }
+}

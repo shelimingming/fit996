@@ -1,0 +1,96 @@
+{
+  "bsonType": "object",
+  "required": ["user_id", "name", "exercises"],
+  "permission": {
+    "read": "doc.user_id == auth.uid || doc.is_system == true || 'READ_FIT996_TRAINING_PLANS' in auth.permission",
+    "create": true,
+    "update": "doc.user_id == auth.uid || 'UPDATE_FIT996_TRAINING_PLANS' in auth.permission",
+    "delete": "doc.user_id == auth.uid || 'DELETE_FIT996_TRAINING_PLANS' in auth.permission"
+  },
+  "properties": {
+    "_id": {
+      "description": "计划ID，系统自动生成"
+    },
+    "user_id": {
+      "bsonType": "string",
+      "description": "用户ID"
+    },
+    "name": {
+      "bsonType": "string",
+      "description": "计划名称"
+    },
+    "description": {
+      "bsonType": "string",
+      "description": "计划描述"
+    },
+    "level": {
+      "bsonType": "int",
+      "description": "计划难度：1-初级，2-中级，3-高级",
+      "minimum": 1,
+      "maximum": 3
+    },
+    "duration_weeks": {
+      "bsonType": "int",
+      "description": "计划持续周数"
+    },
+    "goal": {
+      "bsonType": "string",
+      "description": "训练目标：增肌、减脂、塑形等"
+    },
+    "exercises": {
+      "bsonType": "array",
+      "description": "训练动作列表",
+      "items": {
+        "bsonType": "object",
+        "properties": {
+          "exercise_id": {
+            "bsonType": "string",
+            "description": "动作ID"
+          },
+          "day_of_week": {
+            "bsonType": "int",
+            "description": "星期几：1-7",
+            "minimum": 1,
+            "maximum": 7
+          },
+          "sets": {
+            "bsonType": "int",
+            "description": "组数"
+          },
+          "reps": {
+            "bsonType": "int",
+            "description": "每组重复次数"
+          },
+          "duration": {
+            "bsonType": "int",
+            "description": "持续时间(秒)"
+          },
+          "rest_time": {
+            "bsonType": "int",
+            "description": "休息时间(秒)"
+          },
+          "order": {
+            "bsonType": "int",
+            "description": "顺序"
+          }
+        }
+      }
+    },
+    "is_system": {
+      "bsonType": "bool",
+      "description": "是否系统预设计划"
+    },
+    "is_active": {
+      "bsonType": "bool",
+      "description": "是否激活"
+    },
+    "create_date": {
+      "bsonType": "timestamp",
+      "description": "创建时间"
+    },
+    "update_date": {
+      "bsonType": "timestamp",
+      "description": "更新时间"
+    }
+  }
+}

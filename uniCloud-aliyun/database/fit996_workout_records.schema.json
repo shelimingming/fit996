@@ -1,0 +1,91 @@
+{
+  "bsonType": "object",
+  "required": ["user_id", "start_time"],
+  "permission": {
+    "read": "doc.user_id == auth.uid || 'READ_FIT996_WORKOUT_RECORDS' in auth.permission",
+    "create": true,
+    "update": "doc.user_id == auth.uid || 'UPDATE_FIT996_WORKOUT_RECORDS' in auth.permission",
+    "delete": "doc.user_id == auth.uid || 'DELETE_FIT996_WORKOUT_RECORDS' in auth.permission"
+  },
+  "properties": {
+    "_id": {
+      "description": "记录ID，系统自动生成"
+    },
+    "user_id": {
+      "bsonType": "string",
+      "description": "用户ID"
+    },
+    "plan_id": {
+      "bsonType": "string",
+      "description": "训练计划ID，可为空表示自由训练"
+    },
+    "start_time": {
+      "bsonType": "timestamp",
+      "description": "开始时间"
+    },
+    "end_time": {
+      "bsonType": "timestamp",
+      "description": "结束时间"
+    },
+    "duration": {
+      "bsonType": "int",
+      "description": "训练时长(秒)"
+    },
+    "calories_burned": {
+      "bsonType": "double",
+      "description": "消耗卡路里"
+    },
+    "exercise_records": {
+      "bsonType": "array",
+      "description": "动作记录",
+      "items": {
+        "bsonType": "object",
+        "properties": {
+          "exercise_id": {
+            "bsonType": "string",
+            "description": "动作ID"
+          },
+          "sets": {
+            "bsonType": "array",
+            "description": "组记录",
+            "items": {
+              "bsonType": "object",
+              "properties": {
+                "reps": {
+                  "bsonType": "int",
+                  "description": "重复次数"
+                },
+                "weight": {
+                  "bsonType": "double",
+                  "description": "重量(kg)"
+                },
+                "duration": {
+                  "bsonType": "int",
+                  "description": "持续时间(秒)"
+                },
+                "completed": {
+                  "bsonType": "bool",
+                  "description": "是否完成"
+                }
+              }
+            }
+          },
+          "notes": {
+            "bsonType": "string",
+            "description": "备注"
+          }
+        }
+      }
+    },
+    "feeling": {
+      "bsonType": "int",
+      "description": "感受评分：1-5",
+      "minimum": 1,
+      "maximum": 5
+    },
+    "notes": {
+      "bsonType": "string",
+      "description": "训练备注"
+    }
+  }
+}

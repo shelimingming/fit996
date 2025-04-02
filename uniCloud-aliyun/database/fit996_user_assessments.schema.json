@@ -1,0 +1,79 @@
+{
+  "bsonType": "object",
+  "required": ["user_id", "assessment_date"],
+  "permission": {
+    "read": "doc.user_id == auth.uid || 'READ_FIT996_USER_ASSESSMENTS' in auth.permission",
+    "create": true,
+    "update": "doc.user_id == auth.uid || 'UPDATE_FIT996_USER_ASSESSMENTS' in auth.permission",
+    "delete": "doc.user_id == auth.uid || 'DELETE_FIT996_USER_ASSESSMENTS' in auth.permission"
+  },
+  "properties": {
+    "_id": {
+      "description": "评估ID，系统自动生成"
+    },
+    "user_id": {
+      "bsonType": "string",
+      "description": "用户ID"
+    },
+    "assessment_date": {
+      "bsonType": "timestamp",
+      "description": "评估日期"
+    },
+    "height": {
+      "bsonType": "double",
+      "description": "身高(cm)"
+    },
+    "weight": {
+      "bsonType": "double",
+      "description": "体重(kg)"
+    },
+    "bmi": {
+      "bsonType": "double",
+      "description": "BMI指数"
+    },
+    "push_up_count": {
+      "bsonType": "int",
+      "description": "俯卧撑数量"
+    },
+    "sit_up_count": {
+      "bsonType": "int",
+      "description": "仰卧起坐数量"
+    },
+    "plank_time": {
+      "bsonType": "int",
+      "description": "平板支撑时间(秒)"
+    },
+    "squat_count": {
+      "bsonType": "int",
+      "description": "深蹲数量"
+    },
+    "flexibility_level": {
+      "bsonType": "int",
+      "description": "柔韧性水平：1-低，2-中，3-高",
+      "minimum": 1,
+      "maximum": 3
+    },
+    "endurance_level": {
+      "bsonType": "int",
+      "description": "耐力水平：1-低，2-中，3-高",
+      "minimum": 1,
+      "maximum": 3
+    },
+    "strength_level": {
+      "bsonType": "int",
+      "description": "力量水平：1-低，2-中，3-高",
+      "minimum": 1,
+      "maximum": 3
+    },
+    "overall_level": {
+      "bsonType": "int",
+      "description": "综合水平：1-初级，2-中级，3-高级",
+      "minimum": 1,
+      "maximum": 3
+    },
+    "notes": {
+      "bsonType": "string",
+      "description": "评估备注"
+    }
+  }
+}

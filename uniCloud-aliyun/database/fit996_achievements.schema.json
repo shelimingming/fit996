@@ -1,0 +1,57 @@
+{
+  "bsonType": "object",
+  "required": ["name", "description", "condition"],
+  "permission": {
+    "read": true,
+    "create": "'CREATE_FIT996_ACHIEVEMENTS' in auth.permission",
+    "update": "'UPDATE_FIT996_ACHIEVEMENTS' in auth.permission",
+    "delete": "'DELETE_FIT996_ACHIEVEMENTS' in auth.permission"
+  },
+  "properties": {
+    "_id": {
+      "description": "成就ID，系统自动生成"
+    },
+    "name": {
+      "bsonType": "string",
+      "description": "成就名称"
+    },
+    "description": {
+      "bsonType": "string",
+      "description": "成就描述"
+    },
+    "icon_url": {
+      "bsonType": "string",
+      "description": "成就图标URL"
+    },
+    "category": {
+      "bsonType": "string",
+      "description": "成就分类"
+    },
+    "condition": {
+      "bsonType": "object",
+      "description": "解锁条件",
+      "properties": {
+        "type": {
+          "bsonType": "string",
+          "description": "条件类型：workout_count, exercise_count等"
+        },
+        "value": {
+          "bsonType": "int",
+          "description": "条件值"
+        },
+        "exercise_id": {
+          "bsonType": "string",
+          "description": "特定动作ID，可选"
+        }
+      }
+    },
+    "points": {
+      "bsonType": "int",
+      "description": "成就点数"
+    },
+    "is_hidden": {
+      "bsonType": "bool",
+      "description": "是否隐藏成就"
+    }
+  }
+}

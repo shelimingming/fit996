@@ -6,7 +6,7 @@
 
 ## 集合设计
 
-### 1. 动作集合 (exercises)
+### 1. 动作集合 (fit996_exercises)
 
 ```json
 {
@@ -100,7 +100,7 @@
 }
 ```
 
-### 2. 用户评估集合 (user_assessments)
+### 2. 用户评估集合 (fit996_user_assessments)
 
 ```json
 {
@@ -178,7 +178,7 @@
 }
 ```
 
-### 3. 训练计划集合 (training_plans)
+### 3. 训练计划集合 (fit996_training_plans)
 
 ```json
 {
@@ -273,7 +273,7 @@
 }
 ```
 
-### 4. 训练记录集合 (workout_records)
+### 4. 训练记录集合 (fit996_workout_records)
 
 ```json
 {
@@ -363,7 +363,7 @@
 }
 ```
 
-### 5. 用户收藏集合 (user_favorites)
+### 5. 用户收藏集合 (fit996_user_favorites)
 
 ```json
 {
@@ -389,7 +389,7 @@
 }
 ```
 
-### 6. 用户成就集合 (user_achievements)
+### 6. 用户成就集合 (fit996_user_achievements)
 
 ```json
 {
@@ -415,7 +415,7 @@
 }
 ```
 
-### 7. 成就集合 (achievements)
+### 7. 成就集合 (fit996_achievements)
 
 ```json
 {
@@ -471,79 +471,22 @@
 }
 ```
 
-## 索引设计
-
-### 1. 用户集合 (uni-id-users)
-
-- 主键索引：`_id`
-- 唯一索引：`username`
-
-### 2. 用户信息集合 (user_profiles)
-
-- 主键索引：`_id`
-- 唯一索引：`user_id`
-- 普通索引：`fitness_level`
-
-### 3. 动作集合 (exercises)
-
-- 主键索引：`_id`
-- 复合索引：`{category: 1, difficulty: 1}`
-- 复合索引：`{target_muscles: 1, difficulty: 1}`
-
-### 4. 用户评估集合 (user_assessments)
-
-- 主键索引：`_id`
-- 复合索引：`{user_id: 1, assessment_date: -1}`
-
-### 5. 训练计划集合 (training_plans)
-
-- 主键索引：`_id`
-- 复合索引：`{user_id: 1, is_active: 1}`
-- 复合索引：`{level: 1, goal: 1, is_system: 1}`
-
-### 6. 训练记录集合 (workout_records)
-
-- 主键索引：`_id`
-- 复合索引：`{user_id: 1, start_time: -1}`
-
-### 7. 用户收藏集合 (user_favorites)
-
-- 主键索引：`_id`
-- 唯一索引：`{user_id: 1, exercise_id: 1}`
-
-### 8. 用户成就集合 (user_achievements)
-
-- 主键索引：`_id`
-- 唯一索引：`{user_id: 1, achievement_id: 1}`
-
-## 集合关系
-
-1. **用户与用户信息**：一对一关系，一个用户对应一条用户信息记录
-2. **用户与评估**：一对多关系，一个用户可以有多次评估记录
-3. **用户与训练计划**：一对多关系，一个用户可以创建多个训练计划
-4. **用户与训练记录**：一对多关系，一个用户可以有多条训练记录
-5. **训练计划与训练记录**：一对多关系，一个训练计划可以对应多条训练记录
-6. **动作与训练计划**：多对多关系，通过训练计划中的exercises数组实现
-7. **动作与训练记录**：多对多关系，通过训练记录中的exercise_records数组实现
-8. **用户与收藏动作**：多对多关系，通过用户收藏集合实现
-9. **用户与成就**：多对多关系，通过用户成就集合实现
-
 ## 数据库权限设计
 
 ### 公共权限
 
-- **exercises集合**：所有用户可读，仅管理员可写
-- **achievements集合**：所有用户可读，仅管理员可写
+- **fit996_exercises集合**：所有用户可读，仅管理员可写
+- **fit996_achievements集合**：所有用户可读，仅管理员可写
 
 ### 用户权限
 
 - **uni-id-users集合**：用户只能读写自己的数据
 - **user_profiles集合**：用户只能读写自己的数据
-- **user_assessments集合**：用户只能读写自己的数据
-- **training_plans集合**：用户只能读写自己的数据，系统预设计划所有用户可读
-- **workout_records集合**：用户只能读写自己的数据
-- **user_favorites集合**：用户只能读写自己的数据
-- **user_achievements集合**：用户只能读自己的数据，系统自动写入
+- **fit996_user_assessments集合**：用户只能读写自己的数据
+- **fit996_training_plans集合**：用户只能读写自己的数据，系统预设计划所有用户可读
+- **fit996_workout_records集合**：用户只能读写自己的数据
+- **fit996_user_favorites集合**：用户只能读写自己的数据
+- **fit996_user_achievements集合**：用户只能读自己的数据，系统自动写入
 
 ## 数据迁移与备份策略
 
