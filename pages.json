@@ -19,6 +19,12 @@
 			}
 		},
 		{
+			"path": "pages/exercises/detail",
+			"style": {
+				"navigationBarTitleText": "动作详情"
+			}
+		},
+		{
 			"path": "pages/profile/profile",
 			"style": {
 				"navigationBarTitleText": "我的"

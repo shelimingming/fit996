@@ -1,0 +1,39 @@
+{
+  "bsonType": "object",
+  "required": ["name"],
+  "permission": {
+    "read": true,
+    "create": "'CREATE_FIT996_MUSCLES' in auth.permission",
+    "update": "'UPDATE_FIT996_MUSCLES' in auth.permission",
+    "delete": "'DELETE_FIT996_MUSCLES' in auth.permission"
+  },
+  "properties": {
+    "_id": {
+      "description": "肌肉ID，系统自动生成"
+    },
+    "name": {
+      "bsonType": "string",
+      "description": "肌肉名称"
+    },
+    "description": {
+      "bsonType": "string",
+      "description": "肌肉描述"
+    },
+    "body_part": {
+      "bsonType": "string",
+      "description": "所属身体部位：上肢、下肢、躯干等"
+    },
+    "image_url": {
+      "bsonType": "string",
+      "description": "肌肉图片URL"
+    },
+    "create_date": {
+      "bsonType": "timestamp",
+      "description": "创建时间"
+    },
+    "update_date": {
+      "bsonType": "timestamp",
+      "description": "更新时间"
+    }
+  }
+}

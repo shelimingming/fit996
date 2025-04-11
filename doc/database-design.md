@@ -6,12 +6,95 @@
 
 ## 集合设计
 
-### 1. 动作集合 (fit996_exercises)
+### 1. 目标肌肉集合 (fit996_muscles)
 
 ```json
 {
   "bsonType": "object",
-  "required": ["name", "category", "difficulty", "target_muscles"],
+  "required": ["name"],
+  "properties": {
+    "_id": {
+      "description": "肌肉ID，系统自动生成"
+    },
+    "name": {
+      "bsonType": "string",
+      "description": "肌肉名称"
+    },
+    "description": {
+      "bsonType": "string",
+      "description": "肌肉描述"
+    },
+    "body_part": {
+      "bsonType": "string",
+      "description": "所属身体部位：上肢、下肢、躯干等"
+    },
+    "image_url": {
+      "bsonType": "string",
+      "description": "肌肉图片URL"
+    },
+    "create_date": {
+      "bsonType": "timestamp",
+      "description": "创建时间"
+    },
+    "update_date": {
+      "bsonType": "timestamp",
+      "description": "更新时间"
+    }
+  }
+}
+```
+
+### 2. 器械集合 (fit996_equipment)
+
+```json
+{
+  "bsonType": "object",
+  "required": ["name"],
+  "properties": {
+    "_id": {
+      "description": "器械ID，系统自动生成"
+    },
+    "name": {
+      "bsonType": "string",
+      "description": "器械名称"
+    },
+    "description": {
+      "bsonType": "string",
+      "description": "器械描述"
+    },
+    "category": {
+      "bsonType": "string",
+      "description": "器械分类：自由重量、固定器械、有氧器械等"
+    },
+    "image_url": {
+      "bsonType": "string",
+      "description": "器械图片URL"
+    },
+    "usage_tips": {
+      "bsonType": "array",
+      "description": "使用提示",
+      "items": {
+        "bsonType": "string"
+      }
+    },
+    "create_date": {
+      "bsonType": "timestamp",
+      "description": "创建时间"
+    },
+    "update_date": {
+      "bsonType": "timestamp",
+      "description": "更新时间"
+    }
+  }
+}
+```
+
+### 3. 动作集合 (fit996_exercises)
+
+```json
+{
+  "bsonType": "object",
+  "required": ["name", "target_muscles"],
   "properties": {
     "_id": {
       "description": "动作ID，系统自动生成"
@@ -24,32 +107,24 @@
       "bsonType": "string",
       "description": "动作描述"
     },
-    "category": {
-      "bsonType": "string",
-      "description": "动作分类：力量训练、有氧训练、柔韧性训练等"
-    },
-    "sub_category": {
-      "bsonType": "string",
-      "description": "动作子分类：胸部、背部、腿部等"
-    },
     "difficulty": {
       "bsonType": "int",
-      "description": "难度等级：1-简单，2-中等，3-困难",
-      "minimum": 1,
-      "maximum": 3
+      "description": "难度等级：1-简单，2-中等，3-困难等"
     },
     "target_muscles": {
       "bsonType": "array",
       "description": "目标肌肉群",
       "items": {
-        "bsonType": "string"
+        "bsonType": "string",
+        "foreignKey": "fit996_muscles._id"
       }
     },
     "equipment": {
       "bsonType": "array",
       "description": "所需器材",
       "items": {
-        "bsonType": "string"
+        "bsonType": "string",
+        "foreignKey": "fit996_equipment._id"
       }
     },
     "steps": {
@@ -475,6 +550,8 @@
 
 ### 公共权限
 
+- **fit996_muscles集合**：所有用户可读，仅管理员可写
+- **fit996_equipment集合**：所有用户可读，仅管理员可写
 - **fit996_exercises集合**：所有用户可读，仅管理员可写
 - **fit996_achievements集合**：所有用户可读，仅管理员可写
 

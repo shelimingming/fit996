@@ -35,11 +35,6 @@
 					</view>
 				</view>
 				
-				<!-- 当前选中的分类标题 -->
-				<view class="current-category-title" v-if="!loading && !error">
-					<text>{{currentCategoryTitle}}</text>
-				</view>
-				
 				<!-- 加载中提示 -->
 				<view class="loading-container" v-if="loading">
 					<text class="loading-text">加载中...</text>
@@ -61,7 +56,6 @@
 						</view>
 						<view class="exercise-info">
 							<text class="exercise-name">{{item.name}}</text>
-							<text class="exercise-target">{{item.target}}</text>
 						</view>
 					</view>
 				</view>
@@ -82,30 +76,8 @@
 				searchText: '',
 				currentCategory: 0,
 				currentMuscleGroup: 0,
-				categories: [
-					{ name: '全部', id: 'all' },
-					{ name: '杠铃', id: 'barbell' },
-					{ name: '哑铃', id: 'dumbbell' },
-					{ name: '史密斯', id: 'smith' },
-					{ name: '器械', id: 'machine' },
-					{ name: '绳索', id: 'cable' }
-				],
-				muscleGroups: [
-					{ name: '胸', id: 'chest' },
-					{ name: '背', id: 'back' },
-					{ name: '腿', id: 'legs' },
-					{ name: '肩', id: 'shoulders' },
-					{ name: '斜方肌', id: 'traps' },
-					{ name: '二头', id: 'biceps' },
-					{ name: '三头', id: 'triceps' },
-					{ name: '小腿', id: 'calves' },
-					{ name: '前臂', id: 'forearms' },
-					{ name: '臀部', id: 'glutes' },
-					{ name: '腹部', id: 'abs' },
-					{ name: '拉伸', id: 'stretch' },
-					{ name: '有氧', id: 'cardio' },
-					{ name: '全身', id: 'full_body' }
-				],
+				categories: [],
+				muscleGroups: [],
 				exercises: [],
 				loading: true,
 				error: null,
@@ -116,6 +88,14 @@
 				}
 			}
 		},
+		methods: {
+			// 查看动作详情
+			viewExerciseDetail(exercise) {
+				uni.navigateTo({
+					url: `/pages/exercises/detail?id=${exercise.id}`
+				});
+			}
+		},
 		computed: {
 			filteredExercises() {
 				let result = this.exercises;
@@ -123,15 +103,37 @@
 				// 按肌肉群组筛选
 				if (this.currentMuscleGroup !== 0) {
 					const muscleGroupId = this.muscleGroups[this.currentMuscleGroup].id;
-					result = result.filter(item => 
-						item.target_muscles && item.target_muscles.includes(muscleGroupId)
-					);
+					console.log('当前选中肌群ID:', this.muscleGroups);
+					console.log('当前选中肌群ID:', this.currentMuscleGroup);
+					console.log('当前选中肌群ID:', muscleGroupId);
+					result = result.filter(item => {
+						const hasTargetMuscle = item.target_muscles && item.target_muscles.includes(muscleGroupId);
+						console.log('动作:', item.name, '目标肌群:', item.target_muscles, '是否匹配:', hasTargetMuscle);
+						return hasTargetMuscle;
+					});
 				}
 				
 				// 按器材分类筛选
 				if (this.currentCategory !== 0) {
 					const equipmentId = this.categories[this.currentCategory].id;
-					result = result.filter(item => item.equipment === equipmentId);
+					console.log('当前选中器材ID:', equipmentId);
+					result = result.filter(item => {
+						// 如果当前选择的是"全部"，则不进行筛选
+						if (equipmentId === 'all') {
+							return true;
+						}
+						
+						// 确保item.equipment是数组
+						if (!Array.isArray(item.equipment)) {
+							console.log('动作:', item.name, '器材未定义或格式错误');
+							return false;
+						}
+						
+						// 检查器材ID是否在数组中
+						const hasEquipment = item.equipment.includes(equipmentId);
+						console.log('动作:', item.name, '器材:', item.equipment, '是否包含所选器材:', hasEquipment);
+						return hasEquipment;
+					});
 				}
 				
 				// 按搜索文本筛选
@@ -159,11 +161,62 @@
 				}
 			}
 		},
-		onLoad() {
-			// 页面加载时从数据库获取动作数据
-			this.fetchExercises()
+		async onLoad() {
+			try {
+				// 先加载分类数据
+				await Promise.all([
+					this.fetchMuscleGroups(),
+					this.fetchEquipment()
+				]);
+				// 再加载动作数据
+				await this.fetchExercises();
+			} catch (err) {
+				console.error('初始化数据失败:', err);
+				this.error = '加载数据失败，请稍后重试';
+			}
 		},
 		methods: {
+			// 获取肌肉组数据
+			async fetchMuscleGroups() {
+				try {
+					const db = uniCloud.database();
+					const { result } = await db.collection('fit996_muscles').get();
+					if (result && result.data) {
+						// 添加"全部"选项
+						this.muscleGroups = [
+							{ name: '全部', id: 'all' },
+							...result.data.map(item => ({
+								name: item.name,
+								id: item._id
+							}))
+						];
+					}
+				} catch (err) {
+					console.error('获取肌肉组数据失败:', err);
+					throw err;
+				}
+			},
+
+			// 获取器材分类数据
+			async fetchEquipment() {
+				try {
+					const db = uniCloud.database();
+					const { result } = await db.collection('fit996_equipment').get();
+					if (result && result.data) {
+						// 添加"全部"选项
+						this.categories = [
+							{ name: '全部', id: 'all' },
+							...result.data.map(item => ({
+								name: item.name,
+								id: item._id
+							}))
+						];
+					}
+				} catch (err) {
+					console.error('获取器材分类数据失败:', err);
+					throw err;
+				}
+			},
 			// 切换器材分类
 			switchCategory(index) {
 				this.currentCategory = index;
@@ -193,32 +246,32 @@
 					const { result } = await exercisesCollection.get();
 					
 					if (result && result.data) {
-						// 转换数据格式以适应新UI
 						this.exercises = result.data.map(item => {
-							// 将target_muscles数组转换为字符串
-							const targetStr = item.target_muscles ? item.target_muscles.join('、') : '';
-							
-							// 设置器材分类
-							let equipment = 'all';
-							if (item.equipment_type) {
-								if (item.equipment_type.includes('杠铃')) {
-									equipment = 'barbell';
-								} else if (item.equipment_type.includes('哑铃')) {
-									equipment = 'dumbbell';
-								} else if (item.equipment_type.includes('史密斯')) {
-									equipment = 'smith';
-								} else if (item.equipment_type.includes('器械')) {
-									equipment = 'machine';
-								} else if (item.equipment_type.includes('绳索')) {
-									equipment = 'cable';
+							// 确保equipment和target_muscles是数组，并且只包含ID
+							const equipment = Array.isArray(item.equipment) ? item.equipment.map(eq => {
+								// 如果是ID格式（24位十六进制字符串），直接返回
+								if (typeof eq === 'string' && /^[0-9a-fA-F]{24}$/.test(eq)) {
+									return eq;
 								}
-							}
-							
+								// 在categories中查找对应的ID
+								const found = this.categories.find(cat => cat.name === eq);
+								return found ? found.id : null;
+							}).filter(Boolean) : [];
+
+							const target_muscles = Array.isArray(item.target_muscles) ? item.target_muscles.map(muscle => {
+								// 如果是ID格式，直接返回
+								if (typeof muscle === 'string' && /^[0-9a-fA-F]{24}$/.test(muscle)) {
+									return muscle;
+								}
+								// 在muscleGroups中查找对应的ID
+								const found = this.muscleGroups.find(m => m.name === muscle);
+								return found ? found.id : null;
+							}).filter(Boolean) : [];
+
 							return {
 								name: item.name,
-								target: targetStr,
-								target_muscles: item.target_muscles || [],
-								difficulty: item.difficulty, // 数据库中是1-3的整数
+								target_muscles: target_muscles,
+								difficulty: item.difficulty,
 								equipment: equipment,
 								description: item.description,
 								image_url: item.image_url || '/static/exercises/placeholder.svg',
@@ -284,9 +337,9 @@
 	}
 
 	.sidebar-item {
-		padding: 30rpx 0;
+		padding: 25rpx 0;
 		text-align: center;
-		font-size: 28rpx;
+		font-size: 24rpx;
 		color: #666;
 		border-left: 6rpx solid transparent;
 	}
@@ -339,14 +392,6 @@
 	.tab-item.active {
 		background-color: #1296db;
 		color: #ffffff;
-	}
-
-	/* 当前分类标题 */
-	.current-category-title {
-		font-size: 36rpx;
-		font-weight: bold;
-		margin: 20rpx 0 30rpx 0;
-		color: #333;
 	}
 
 	/* 动作网格布局 */

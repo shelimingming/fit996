@@ -10,338 +10,218 @@
 
 // ==================== 训练动作数据模拟 ====================
 
-// 创建训练动作数据
-const exercises = [
-  // 力量训练 - 上肢
+// 初始化目标肌肉集合
+db.collection('fit996_muscles').remove()
+const muscles = [
   {
-    name: "俯卧撑",
-    description: "一种经典的上肢力量训练动作，主要锻炼胸肌、肱三头肌和肩部肌肉。",
-    category: "力量训练",
-    sub_category: "胸部",
+    name: '胸大肌',
+    description: '胸部主要肌肉，负责手臂向前和向中间收拢的动作',
+    body_part: '上肢',
+    image_url: '/static/muscles/chest.svg',
+    create_date: new Date('2024-01-01').getTime(),
+    update_date: new Date('2024-01-01').getTime()
+  },
+  {
+    name: '背阔肌',
+    description: '背部最大的肌肉，负责手臂向后拉的动作',
+    body_part: '躯干',
+    image_url: '/static/muscles/back.svg',
+    create_date: new Date('2024-01-01').getTime(),
+    update_date: new Date('2024-01-01').getTime()
+  },
+  {
+    name: '臀大肌',
+    description: '臀部主要肌肉，负责髋关节伸展',
+    body_part: '下肢',
+    image_url: '/static/muscles/glutes.svg',
+    create_date: new Date('2024-01-01').getTime(),
+    update_date: new Date('2024-01-01').getTime()
+  },
+  {
+    name: '股四头肌',
+    description: '大腿前侧肌群，负责膝关节伸展',
+    body_part: '下肢',
+    image_url: '/static/muscles/quads.svg',
+    create_date: new Date('2024-01-01').getTime(),
+    update_date: new Date('2024-01-01').getTime()
+  },
+  {
+    name: '三角肌',
+    description: '肩部主要肌肉，负责手臂外展和前举',
+    body_part: '上肢',
+    image_url: '/static/muscles/shoulders.svg',
+    create_date: new Date('2024-01-01').getTime(),
+    update_date: new Date('2024-01-01').getTime()
+  },
+  {
+    name: '肱二头肌',
+    description: '上臂前侧肌肉，负责手臂弯曲',
+    body_part: '上肢',
+    image_url: '/static/muscles/biceps.svg',
+    create_date: new Date('2024-01-01').getTime(),
+    update_date: new Date('2024-01-01').getTime()
+  },
+  {
+    name: '肱三头肌',
+    description: '上臂后侧肌肉，负责手臂伸展',
+    body_part: '上肢',
+    image_url: '/static/muscles/triceps.svg',
+    create_date: new Date('2024-01-01').getTime(),
+    update_date: new Date('2024-01-01').getTime()
+  }
+]
+
+db.collection('fit996_muscles').add(muscles)
+
+// 初始化器械集合
+db.collection('fit996_equipment').remove()
+const equipment = [
+  {
+    name: '哑铃',
+    description: '可调节重量的自由重量训练器械',
+    category: '自由重量',
+    image_url: '/static/equipment/dumbbell.svg',
+    usage_tips: [
+      '使用前确保重量适中',
+      '保持正确的握姿',
+      '动作要缓慢可控'
+    ],
+    create_date: new Date('2024-01-01').getTime(),
+    update_date: new Date('2024-01-01').getTime()
+  },
+  {
+    name: '椅子',
+    description: '日常可用的辅助训练器具',
+    category: '辅助器具',
+    image_url: '/static/equipment/chair.svg',
+    usage_tips: [
+      '确保椅子稳固',
+      '注意安全距离',
+      '可用于多种训练动作'
+    ],
+    create_date: new Date('2024-01-01').getTime(),
+    update_date: new Date('2024-01-01').getTime()
+  },
+  {
+    name: '徒手',
+    description: '使用自身体重进行训练',
+    category: '徒手训练',
+    image_url: '/static/equipment/bodyweight.svg',
+    usage_tips: [
+      '注意正确的体态',
+      '循序渐进增加难度',
+      '适合初学者入门'
+    ],
+    create_date: new Date('2024-01-01').getTime(),
+    update_date: new Date('2024-01-01').getTime()
+  }
+]
+
+db.collection('fit996_equipment').add(equipment)
+
+// 初始化训练动作集合
+db.collection('fit996_exercises').remove()
+const exercises = [
+  {
+    name: '俯卧撑',
+    description: '经典的上肢力量训练动作',
     difficulty: 2,
-    target_muscles: ["胸大肌", "肱三头肌", "三角肌前束"],
-    equipment: [],
+    target_muscles: ['67ee792055b3373c72464b60', '67ee792055b3373c72464b64', '67ee792055b3373c72464b66'],
+    equipment: ['67ee7929ce5ec9aecac55673'],
     steps: [
       {
         step_number: 1,
-        description: "俯卧在地面上，双手撑地，手掌与肩同宽或稍宽，手指向前。",
-        image_url: "/static/exercises/pushup-1.svg"
+        description: '双手略宽于肩，撑地成平板支撑',
+        image_url: '/static/exercises/pushup-1.svg'
       },
       {
         step_number: 2,
-        description: "绷紧核心和臀部，保持身体成一直线，从头到脚跟。",
-        image_url: "/static/exercises/pushup-2.svg"
+        description: '保持核心收紧，弯曲手臂下降身体',
+        image_url: '/static/exercises/pushup-2.svg'
       },
       {
         step_number: 3,
-        description: "弯曲手肘，缓慢降低身体直到胸部几乎触地。",
-        image_url: "/static/exercises/pushup-3.svg"
-      },
-      {
-        step_number: 4,
-        description: "通过推动地面，伸直手臂回到起始位置。",
-        image_url: "/static/exercises/pushup-4.svg"
+        description: '当胸部接近地面时，推回起始位置',
+        image_url: '/static/exercises/pushup-3.svg'
       }
     ],
+    video_url: '/static/exercises/pushup.mp4',
     tips: [
-      "保持颈部中立，视线稍微向前下方",
-      "避免臀部下沉或抬高",
-      "如果标准俯卧撑太难，可以先从膝盖俯卧撑开始"
+      '保持身体成一条直线',
+      '肘部贴近身体',
+      '呼吸要均匀'
     ],
     calories_per_min: 8.0,
-    create_date: 1704038400000, // 2024-01-01 00:00:00
-    update_date: 1704038400000 // 2024-01-01 00:00:00
+    create_date: new Date('2024-01-01').getTime(),
+    update_date: new Date('2024-01-01').getTime()
   },
   {
-    name: "哑铃肩推举",
-    description: "使用哑铃进行的肩部力量训练，主要锻炼三角肌。",
-    category: "力量训练",
-    sub_category: "肩部",
+    name: '哑铃弯举',
+    description: '针对性训练二头肌的动作',
+    difficulty: 1,
+    target_muscles: ['67ee792055b3373c72464b65'],
+    equipment: ['67ee7929ce5ec9aecac55671'],
+    steps: [
+      {
+        step_number: 1,
+        description: '站姿手臂自然下垂持哑铃',
+        image_url: '/static/exercises/curl-1.svg'
+      },
+      {
+        step_number: 2,
+        description: '弯曲手臂，将哑铃举至肩部',
+        image_url: '/static/exercises/curl-2.svg'
+      },
+      {
+        step_number: 3,
+        description: '缓慢放下回到起始位置',
+        image_url: '/static/exercises/curl-3.svg'
+      }
+    ],
+    video_url: '/static/exercises/curl.mp4',
+    tips: [
+      '保持上臂固定',
+      '动作要慢且可控',
+      '注意正确握姿'
+    ],
+    calories_per_min: 5.0,
+    create_date: new Date('2024-01-01').getTime(),
+    update_date: new Date('2024-01-01').getTime()
+  },
+  {
+    name: '深蹲',
+    description: '全身性的下肢力量训练动作',
     difficulty: 2,
-    target_muscles: ["三角肌", "肱三头肌"],
-    equipment: ["哑铃"],
+    target_muscles: ['67ee792055b3373c72464b63', '67ee792055b3373c72464b62'],
+    equipment: ['67ee7929ce5ec9aecac55673'],
     steps: [
       {
         step_number: 1,
-        description: "坐在椅子上或站立，双手各持一个哑铃，手掌向前，哑铃位于肩膀高度。",
-        image_url: "/static/exercises/shoulder-press-1.svg"
+        description: '站立时双脚略宽于肩',
+        image_url: '/static/exercises/squat-1.svg'
       },
       {
         step_number: 2,
-        description: "保持核心收紧，缓慢将哑铃向上推举过头顶，直到手臂几乎完全伸直。",
-        image_url: "/static/exercises/shoulder-press-2.svg"
+        description: '屈膝下蹲，臀部向后坐',
+        image_url: '/static/exercises/squat-2.svg'
       },
       {
         step_number: 3,
-        description: "控制哑铃缓慢下降回到肩膀高度的起始位置。",
-        image_url: "/static/exercises/shoulder-press-3.svg"
+        description: '大腿平行地面后站起',
+        image_url: '/static/exercises/squat-3.svg'
       }
     ],
+    video_url: '/static/exercises/squat.mp4',
     tips: [
-      "避免过度弓背",
-      "动作过程中保持手腕中立",
-      "如果感到肩部不适，可以尝试掌心相对的姿势"
+      '保持脊柱中立',
+      '膝盖不要超过脚尖',
+      '下蹲时保持重心稳定'
     ],
-    calories_per_min: 6.5,
-    create_date: 1704038400000, // 2024-01-01 00:00:00
-    update_date: 1704038400000 // 2024-01-01 00:00:00
-  },
-  
-  // 力量训练 - 下肢
-  {
-    name: "深蹲",
-    description: "一种基础的下肢力量训练动作，主要锻炼大腿和臀部肌肉。",
-    category: "力量训练",
-    sub_category: "腿部",
-    difficulty: 2,
-    target_muscles: ["股四头肌", "臀大肌", "腘绳肌"],
-    equipment: [],
-    steps: [
-      {
-        step_number: 1,
-        description: "双脚与肩同宽站立，脚尖稍微向外。",
-        image_url: "/static/exercises/squat-1.svg"
-      },
-      {
-        step_number: 2,
-        description: "挺胸收腹，保持背部挺直，双臂可前伸保持平衡。",
-        image_url: "/static/exercises/squat-2.svg"
-      },
-      {
-        step_number: 3,
-        description: "弯曲膝盖和髋部，慢慢下蹲，就像要坐到椅子上一样。",
-        image_url: "/static/exercises/squat-3.svg"
-      },
-      {
-        step_number: 4,
-        description: "下蹲到大腿与地面平行或稍低的位置，然后通过脚跟发力站起。",
-        image_url: "/static/exercises/squat-4.svg"
-      }
-    ],
-    tips: [
-      "保持膝盖与脚尖方向一致，不要内扣",
-      "下蹲时保持脚跟着地",
-      "背部始终保持自然弧度，不要驼背"
-    ],
-    calories_per_min: 8.5,
-    create_date: 1704038400000, // 2024-01-01 00:00:00
-    update_date: 1704038400000 // 2024-01-01 00:00:00
-  },
-  
-  // 力量训练 - 核心
-  {
-    name: "平板支撑",
-    description: "一种静态核心训练动作，可以锻炼腹部、背部和肩部肌肉。",
-    category: "力量训练",
-    sub_category: "核心",
-    difficulty: 1,
-    target_muscles: ["腹直肌", "腹横肌", "竖脊肌"],
-    equipment: [],
-    steps: [
-      {
-        step_number: 1,
-        description: "俯卧在地面上，前臂撑地，肘部位于肩部正下方。",
-        image_url: "/static/exercises/plank-1.svg"
-      },
-      {
-        step_number: 2,
-        description: "脚尖着地，抬起身体，使身体从头到脚跟形成一条直线。",
-        image_url: "/static/exercises/plank-2.svg"
-      },
-      {
-        step_number: 3,
-        description: "收紧腹部和臀部肌肉，保持这个姿势30秒到1分钟。",
-        image_url: "/static/exercises/plank-3.svg"
-      }
-    ],
-    tips: [
-      "避免臀部过高或过低",
-      "保持正常呼吸，不要屏息",
-      "如果感到手腕不适，可以握拳支撑"
-    ],
-    calories_per_min: 4.0,
-    create_date: 1704038400000, // 2024-01-01 00:00:00
-    update_date: 1704038400000 // 2024-01-01 00:00:00
-  },
-  
-  // 有氧训练
-  {
-    name: "原地高抬腿",
-    description: "一种简单有效的有氧训练动作，可以提高心率和锻炼下肢肌肉。",
-    category: "有氧训练",
-    sub_category: "",
-    difficulty: 1,
-    target_muscles: ["股四头肌", "髂腰肌", "腹直肌"],
-    equipment: [],
-    steps: [
-      {
-        step_number: 1,
-        description: "站立，双脚与肩同宽，挺胸收腹。",
-        image_url: "/static/exercises/high-knees-1.svg"
-      },
-      {
-        step_number: 2,
-        description: "抬起右膝，使大腿与地面平行或接近平行。",
-        image_url: "/static/exercises/high-knees-2.svg"
-      },
-      {
-        step_number: 3,
-        description: "放下右脚，同时抬起左膝。",
-        image_url: "/static/exercises/high-knees-3.svg"
-      },
-      {
-        step_number: 4,
-        description: "保持快速交替抬膝的节奏，类似于原地跑步。",
-        image_url: "/static/exercises/high-knees-4.svg"
-      }
-    ],
-    tips: [
-      "保持上身挺直，不要前倾",
-      "可以配合手臂摆动增加强度",
-      "根据个人体能调整速度和高度"
-    ],
-    calories_per_min: 10.0,
-    create_date: 1704038400000, // 2024-01-01 00:00:00
-    update_date: 1704038400000 // 2024-01-01 00:00:00
-  },
-  {
-    name: "跳绳",
-    description: "一种高效的全身有氧训练，可以提高心肺功能和协调性。",
-    category: "有氧训练",
-    sub_category: "",
-    difficulty: 2,
-    target_muscles: ["小腿肌群", "前臂肌群", "肩部肌群"],
-    equipment: ["跳绳"],
-    steps: [
-      {
-        step_number: 1,
-        description: "双手各握住跳绳一端，跳绳放在身后地面上。",
-        image_url: "/static/exercises/jump-rope-1.svg"
-      },
-      {
-        step_number: 2,
-        description: "通过手腕的转动，将绳子从头顶甩向前方。",
-        image_url: "/static/exercises/jump-rope-2.svg"
-      },
-      {
-        step_number: 3,
-        description: "当绳子接近脚下时，轻轻跳起让绳子通过。",
-        image_url: "/static/exercises/jump-rope-3.svg"
-      },
-      {
-        step_number: 4,
-        description: "保持节奏，连续跳跃。",
-        image_url: "/static/exercises/jump-rope-4.svg"
-      }
-    ],
-    tips: [
-      "跳跃高度不需要太高，只要能让绳子通过即可",
-      "保持手肘靠近身体，主要使用手腕转动绳子",
-      "初学者可以先不用绳子练习跳跃动作"
-    ],
-    calories_per_min: 12.0,
-    create_date: 1704038400000, // 2024-01-01 00:00:00
-    update_date: 1704038400000 // 2024-01-01 00:00:00
-  },
-  
-  // 柔韧性训练
-  {
-    name: "坐姿前屈",
-    description: "一种基础的柔韧性训练动作，主要拉伸腿后侧肌群。",
-    category: "柔韧性训练",
-    sub_category: "",
-    difficulty: 1,
-    target_muscles: ["腘绳肌", "臀大肌", "下背部肌群"],
-    equipment: [],
-    steps: [
-      {
-        step_number: 1,
-        description: "坐在地面上，双腿并拢向前伸直。",
-        image_url: "/static/exercises/seated-forward-bend-1.svg"
-      },
-      {
-        step_number: 2,
-        description: "挺直脊柱，深吸一口气。",
-        image_url: "/static/exercises/seated-forward-bend-2.svg"
-      },
-      {
-        step_number: 3,
-        description: "呼气的同时，从髋部弯曲上身向前倾，双手尽量触碰脚尖或脚踝。",
-        image_url: "/static/exercises/seated-forward-bend-3.svg"
-      },
-      {
-        step_number: 4,
-        description: "保持这个姿势20-30秒，感受腿后侧的拉伸。",
-        image_url: "/static/exercises/seated-forward-bend-4.svg"
-      }
-    ],
-    tips: [
-      "不要弯曲膝盖，保持腿部伸直",
-      "拉伸时保持呼吸均匀，不要屏息",
-      "不要强行过度拉伸，以感到轻微拉伸为宜"
-    ],
-    calories_per_min: 2.5,
-    create_date: 1704038400000, // 2024-01-01 00:00:00
-    update_date: 1704038400000 // 2024-01-01 00:00:00
-  },
-  {
-    name: "颈部拉伸",
-    description: "一种简单的颈部柔韧性训练，可以缓解颈部紧张和疲劳。",
-    category: "柔韧性训练",
-    sub_category: "",
-    difficulty: 1,
-    target_muscles: ["斜方肌", "胸锁乳突肌"],
-    equipment: [],
-    steps: [
-      {
-        step_number: 1,
-        description: "坐直或站立，保持肩膀放松。",
-        image_url: "/static/exercises/neck-stretch-1.svg"
-      },
-      {
-        step_number: 2,
-        description: "将右手轻放在头的左侧，轻轻将头部向右侧倾斜。",
-        image_url: "/static/exercises/neck-stretch-2.svg"
-      },
-      {
-        step_number: 3,
-        description: "保持这个姿势15-20秒，感受颈部左侧的拉伸。",
-        image_url: "/static/exercises/neck-stretch-3.svg"
-      },
-      {
-        step_number: 4,
-        description: "换边重复相同动作。",
-        image_url: "/static/exercises/neck-stretch-4.svg"
-      }
-    ],
-    tips: [
-      "拉伸时动作要轻柔，不要用力过猛",
-      "如果感到疼痛，立即停止",
-      "拉伸过程中保持正常呼吸"
-    ],
-    calories_per_min: 1.5,
-    create_date: 1704038400000, // 2024-01-01 00:00:00
-    update_date: 1704038400000 // 2024-01-01 00:00:00
+    calories_per_min: 7.0,
+    create_date: new Date('2024-01-01').getTime(),
+    update_date: new Date('2024-01-01').getTime()
   }
-];
+]
 
-// 插入数据到fit996_exercises集合
-db.collection('fit996_exercises').add(exercises);
+db.collection('fit996_exercises').add(exercises)
 
-// 查询所有训练动作数据
-// db.collection('fit996_exercises').get();
-
-// 按分类查询训练动作
-// db.collection('fit996_exercises').where({
-//   category: '力量训练'
-// }).get();
-
-// 按难度查询训练动作
-// db.collection('fit996_exercises').where({
-//   difficulty: 1
-// }).get();
-
-// 按目标肌肉群查询训练动作
-// db.collection('fit996_exercises').where({
-//   target_muscles: 'in', ['胸大肌']
-// }).get();
